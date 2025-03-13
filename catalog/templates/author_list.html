@@ -1,0 +1,60 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <div class="card shadow-lg border-0">
+          <div class="card-body">
+            <h1 class="text-center text-primary fw-bold"><i class="bi bi-people"></i> Author List</h1>
+
+            {% if author_list %}
+              <ul class="list-group list-group-flush mt-3">
+                {% for author in author_list %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <a href="{% url 'author-detail' author.id %}" class="text-decoration-none text-dark fw-semibold">
+                      <i class="bi bi-person"></i> {{ author.first_name }} {{ author.last_name }}
+                    </a>
+                    <i class="bi bi-arrow-right-circle text-primary"></i>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% else %}
+              <p class="text-center text-muted">No authors found.</p>
+            {% endif %}
+
+            {% if is_paginated %}
+            <nav aria-label="Page navigation" class="mt-4">
+              <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page=1"><i class="bi bi-chevron-double-left"></i> First</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}"><i class="bi bi-chevron-left"></i> Previous</a>
+                  </li>
+                {% endif %}
+
+                <li class="page-item active">
+                  <span class="page-link bg-primary text-white">
+                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                  </span>
+                </li>
+
+                {% if page_obj.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next <i class="bi bi-chevron-right"></i></a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last <i class="bi bi-chevron-double-right"></i></a>
+                  </li>
+                {% endif %}
+              </ul>
+            </nav>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

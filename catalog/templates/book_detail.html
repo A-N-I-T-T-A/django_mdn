@@ -1,0 +1,47 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <div class="card shadow-lg border-0">
+          <div class="card-body">
+            <div class="text-center">
+              <h1 class="text-primary fw-bold"><i class="bi bi-book"></i> {{ book.title }}</h1>
+            </div>
+            
+            <ul class="list-group list-group-flush mt-3">
+              <li class="list-group-item">
+                <strong><i class="bi bi-person"></i> Author:</strong>
+                <a href="{% url 'author-detail' book.author.id %}" class="text-decoration-none text-dark">{{ book.author }}</a>
+              </li>
+              <li class="list-group-item"><strong><i class="bi bi-file-text"></i> Summary:</strong> {{ book.summary }}</li>
+              <li class="list-group-item"><strong><i class="bi bi-upc-scan"></i> ISBN:</strong> {{ book.isbn }}</li>
+              <li class="list-group-item"><strong><i class="bi bi-translate"></i> Language:</strong> {{ book.language }}</li>
+              <li class="list-group-item"><strong><i class="bi bi-tags"></i> Genre:</strong> {{ book.genre.all|join:", " }}</li>
+            </ul>
+
+            <div class="mt-4">
+              <h4 class="text-center text-secondary"><i class="bi bi-collection"></i> Copies</h4>
+              {% for copy in book.bookinstance_set.all %}
+                <div class="card mt-3 border-0 shadow-sm">
+                  <div class="card-body">
+                    <p class="fw-bold 
+                      {% if copy.status == 'a' %} text-success {% elif copy.status == 'm' %} text-danger {% else %} text-warning {% endif %}">
+                      <i class="bi bi-info-circle"></i> {{ copy.get_status_display }}
+                    </p>
+                    {% if copy.status != 'a' %}
+                      <p><strong><i class="bi bi-calendar"></i> Due to be returned:</strong> {{ copy.due_back }}</p>
+                    {% endif %}
+                    <p><strong><i class="bi bi-building"></i> Imprint:</strong> {{ copy.imprint }}</p>
+                    <p class="text-muted"><strong><i class="bi bi-hash"></i> ID:</strong> {{ copy.id }}</p>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
